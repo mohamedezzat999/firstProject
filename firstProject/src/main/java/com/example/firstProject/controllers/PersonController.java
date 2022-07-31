@@ -1,7 +1,8 @@
-package com.example.firstProject;
+package com.example.firstProject.controllers;
 
+import com.example.firstProject.models.Person;
+import com.example.firstProject.services.PersonService;
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,31 +12,37 @@ import java.util.UUID;
 @RestController
 @RequestMapping("v1/person")
  class PersonController {
+
     private final PersonService personService;
-    @Autowired
-    public PersonController(PersonService personService) {
+
+    PersonController(PersonService personService) {
         this.personService = personService;
     }
-    @PostMapping
-    public void addPerson(@Validated @NonNull  @RequestBody Person person){
+
+    @PostMapping("/add")
+    public void addPerson(@RequestBody Person person){
         personService.addPerson(person);
     }
-    @GetMapping
+    @GetMapping("/get-all")
     public List<Person> getAllPeople(){
         return personService.getAllPeople();
     }
-    @GetMapping(path = "{id}")
+    @GetMapping(path = "/get/{id}")
     public Person getPersonById(@PathVariable("id") UUID id){
         return personService.getPersonById(id).orElse(null);
     }
 
-    @DeleteMapping(path = "{id}")
+    @DeleteMapping(path = "/delete/{id}")
     public void deletePersonById(@PathVariable("id") UUID id){
         personService.deletePerson(id);
     }
 
-    @PutMapping(path = "{id}")
-    public void updatePerson(@PathVariable("id") UUID id,@Validated @NonNull @RequestBody Person personToUpdate){
+    @PutMapping(path = "/update/{id}")
+    public void updatePerson(@PathVariable("id") UUID id,@RequestBody Person personToUpdate){
         personService.updatePerson(id,personToUpdate);
+    }
+    @GetMapping("/get-names")
+    public List<String> usersNames(){
+        return personService.getNames();
     }
 }

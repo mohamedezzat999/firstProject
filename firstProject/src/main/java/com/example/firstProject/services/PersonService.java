@@ -1,5 +1,7 @@
-package com.example.firstProject;
+package com.example.firstProject.services;
 
+import com.example.firstProject.database.daos.PersonDao;
+import com.example.firstProject.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -8,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
-public class PersonService {
+    @Service
+    public class PersonService {
     private final PersonDao personDao;
-@Autowired
+    @Autowired
     public PersonService(@Qualifier("postgres") PersonDao personDao) {
         this.personDao = personDao;
     }
@@ -32,6 +34,9 @@ public class PersonService {
     }
     public int updatePerson(UUID id,Person newPerson){
     return personDao.updatePersonById(id,newPerson);
+    }
 
+    public List<String> getNames(){
+        return personDao.getPersonNames();
     }
 }

@@ -1,13 +1,15 @@
-package com.example.firstProject;
+package com.example.firstProject.database.resourses;
 
+import com.example.firstProject.database.daos.PersonDao;
+import com.example.firstProject.models.Person;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-@Repository("fakeDao")
-public class FakePersonDataAcessService implements PersonDao {
+@Repository("postgres")
+public class PersonDataAcessService implements PersonDao {
     private static List<Person> db =new ArrayList<>();
     @Override
     public int instertPerson(UUID id, Person person) {
@@ -39,12 +41,21 @@ public class FakePersonDataAcessService implements PersonDao {
     public int updatePersonById(UUID id, Person update) {
         return selectPersonById(id)
                 .map(person ->{
-            int indexOfPersonToUpdate = db.indexOf(person);
-            if (indexOfPersonToUpdate>=0) {
-                db.set(indexOfPersonToUpdate, new Person(id,update.getName()));
-                return 1;
-            }
-            return 0;
-        }).orElse(0);
+                    int indexOfPersonToUpdate = db.indexOf(person);
+                    if (indexOfPersonToUpdate>=0) {
+                        db.set(indexOfPersonToUpdate, new Person(id,update.getName()));
+                        return 1;
+                    }
+                    return 0;
+                }).orElse(0);
+    }
+
+    @Override
+    public List<String> getPersonNames() {
+        List<String> names = new ArrayList<>();
+        db.forEach(person -> {
+            names.add(person.getName());
+        });
+        return names;
     }
 }

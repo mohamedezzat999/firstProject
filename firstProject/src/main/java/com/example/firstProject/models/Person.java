@@ -1,4 +1,4 @@
-package com.example.firstProject;
+package com.example.firstProject.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotBlank;
